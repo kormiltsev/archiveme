@@ -7,10 +7,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kormiltsev/directoryToGzipEncrypted/internal/compressers"
-	"github.com/kormiltsev/directoryToGzipEncrypted/internal/encoders"
+	"github.com/kormiltsev/archiveme/internal/compressers"
+	"github.com/kormiltsev/archiveme/internal/encoders"
 )
 
+// Coder is main structure for app, there is all of settings. Used as interface.
 type Coder struct {
 	Password   string
 	SourceName string
@@ -18,6 +19,7 @@ type Coder struct {
 	FileType   string
 }
 
+// New returns Coder with settings.
 func New() (*Coder, error) {
 	coder := new(Coder)
 	coder.setDefault()
@@ -30,10 +32,12 @@ func New() (*Coder, error) {
 	return coder, nil
 }
 
+// Do runs arviver
 func (cod *Coder) Do() error {
 	return cod.switcher()
 }
 
+// switcher run encode and compress or decode and decompress, depends on file name has suffix
 func (cod *Coder) switcher() error {
 	ext := strings.ToLower(filepath.Ext(cod.SourceName))
 	if ext == cod.FileType {
@@ -42,6 +46,7 @@ func (cod *Coder) switcher() error {
 	return cod.encod()
 }
 
+// encod operates compression and encoding
 func (cod *Coder) encod() error {
 
 	// compress file or folder
@@ -68,6 +73,7 @@ func (cod *Coder) encod() error {
 	return nil
 }
 
+// decod operates decompression and decoding
 func (cod *Coder) decod() error {
 	// open file
 	massa, err := ioutil.ReadFile(cod.SourceName)

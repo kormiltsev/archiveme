@@ -1,2 +1,11 @@
+# for debugging
 data/
+
+# execs
 bin/
+
+# debug files
+*.out
+
+# results
+*.nau

@@ -10,19 +10,24 @@ import (
 	"strings"
 )
 
-// check for path traversal and correct forward slashes
+// check for path correct
 func validRelPath(p string) bool {
-	if p == "" || strings.Contains(p, `\`) || strings.HasPrefix(p, "/") || strings.Contains(p, "../") {
+	p = strings.TrimPrefix(p, "/")
+	p = strings.TrimPrefix(p, "../")
+
+	if p == "" || strings.Contains(p, `\`) || strings.Contains(p, "../") {
 		return false
 	}
+
 	return true
 }
 
+// Decompresso find file arcived by address provided, decode, unzip and untar it to the result folder. Returns error.
 func Decompresso(src io.Reader, dst string) error {
 	// ungzip
 	zr, err := gzip.NewReader(src)
 	if err != nil {
-		return fmt.Errorf("can't decompress file, wrong password?")
+		return fmt.Errorf("can't decompress file, wrong password? error: %s", err)
 	}
 	// untar
 	tr := tar.NewReader(zr)
@@ -31,7 +36,7 @@ func Decompresso(src io.Reader, dst string) error {
 	for {
 		header, err := tr.Next()
 		if err == io.EOF {
-			break // End of archive
+			break
 		}
 		if err != nil {
 			return err
@@ -45,8 +50,6 @@ func Decompresso(src io.Reader, dst string) error {
 
 		// add dst + re-format slashes according to system
 		target = filepath.Join(dst, header.Name)
-		// if no join is needed, replace with ToSlash:
-		// target = filepath.ToSlash(header.Name)
 
 		// check the type
 		switch header.Typeflag {
@@ -65,12 +68,11 @@ func Decompresso(src io.Reader, dst string) error {
 			if err != nil {
 				return err
 			}
-			// copy over contents
+
 			if _, err := io.Copy(fileToWrite, tr); err != nil {
 				return err
 			}
-			// manually close here after each file operation; defering would cause each file close
-			// to wait until all operations have completed.
+
 			fileToWrite.Close()
 		}
 	}

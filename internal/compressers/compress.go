@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 )
 
+// Compresso find file or folder by address provided, tar it, and gzip it. Results in buf. Returns error.
 func Compresso(src string, buf io.Writer) error {
 	// tar > gzip > buf
 	zr := gzip.NewWriter(buf)
@@ -57,7 +58,6 @@ func Compresso(src string, buf io.Writer) error {
 			}
 
 			// must provide real name
-			// (see https://golang.org/src/archive/tar/common.go?#L626)
 			header.Name = filepath.ToSlash(file)
 
 			// write header

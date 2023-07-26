@@ -9,6 +9,7 @@ import (
 	"io"
 )
 
+// Encrypto encode file with password.
 func Encrypto(plaintext, keystring []byte) ([]byte, error) {
 
 	// Key

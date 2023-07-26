@@ -7,6 +7,7 @@ import (
 	"fmt"
 )
 
+// Decrypto decode file with password. Returns array bytes and error.
 func Decrypto(ciphertext, keystring []byte) ([]byte, error) {
 
 	// Key

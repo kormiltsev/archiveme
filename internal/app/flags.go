@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// parseflag parses flags.
 func (cod *Coder) parseflag() error {
 
 	// Client settings
@@ -19,9 +20,9 @@ func (cod *Coder) parseflag() error {
 	flag.Parse()
 
 	if cod.SourceName == "" {
-		if len(flag.Args()[0]) == 0 {
+		if len(flag.Args()) == 0 {
 			// fmt.Print(about())
-			return fmt.Errorf("Zero arguments")
+			return fmt.Errorf("at least one argument required (./fileToArchive)")
 		}
 		cod.SourceName = flag.Args()[0]
 	}
