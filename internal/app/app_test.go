@@ -1,8 +1,9 @@
 package app
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNew(t *testing.T) {
@@ -28,6 +29,6 @@ func TestSetDefault(t *testing.T) {
 
 	cod.setDefault()
 	assert.Equal(cod.Password, "0000", "Default Password in Coder was changed in app/default.go")
-	assert.Equal(cod.Result, ".", "Default Result in Coder was changed in app/default.go")
+	assert.Equal(cod.Result, "result", "Default Result in Coder was changed in app/default.go")
 	assert.Equal(cod.FileType, ".archiveme", "Default FileType in Coder was changed in app/default.go")
 }

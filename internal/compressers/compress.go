@@ -43,13 +43,18 @@ func Compresso(src string, buf io.Writer) error {
 			return err
 		}
 		if _, err := io.Copy(tw, data); err != nil {
-			log.Println("Copy error:", err)
-			return err
+			log.Printf("File skipped (not archived):%s err:%v", src, err)
+			// return err
 		}
 	} else if mode.IsDir() { // folder
 
 		// walk through every file in the folder
 		filepath.Walk(src, func(file string, fi os.FileInfo, err error) error {
+			if err != nil {
+				log.Printf("prevent panic by handling failure accessing a path %q: %v\n", file, err)
+				return err
+			}
+
 			// generate tar header
 			header, err := tar.FileInfoHeader(fi, file)
 			if err != nil {
@@ -73,7 +78,7 @@ func Compresso(src string, buf io.Writer) error {
 					return err
 				}
 				if _, err := io.Copy(tw, data); err != nil {
-					log.Println("Copy err:", err)
+					log.Printf("Copy with file %s err:%v", file, err)
 					return err
 				}
 			}

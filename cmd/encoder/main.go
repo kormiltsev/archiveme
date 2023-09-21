@@ -10,7 +10,7 @@ import (
 // errf operates errors and return Exit status 1.
 func errf(err error) {
 	fmt.Println("Error:", err)
-	fmt.Print(app.About())
+	fmt.Println(app.About())
 	os.Exit(1)
 }
 
