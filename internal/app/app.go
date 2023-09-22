@@ -2,8 +2,8 @@ package app
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -65,8 +65,15 @@ func (cod *Coder) encod() error {
 
 	// write file to disk
 	_, outFile := filepath.Split(cod.SourceName)
+	if outFile == "." {
+		outFile = "result"
+	}
+
+	// filename.filetype
 	outFile = outFile + cod.FileType
-	if err = ioutil.WriteFile(outFile, massa, 0600); err != nil {
+
+	// write file
+	if err = os.WriteFile(outFile, massa, 0600); err != nil {
 		log.Println(" encod WriteFile err:", err)
 		return err
 	}
@@ -76,7 +83,7 @@ func (cod *Coder) encod() error {
 // decod operates decompression and decoding
 func (cod *Coder) decod() error {
 	// open file
-	massa, err := ioutil.ReadFile(cod.SourceName)
+	massa, err := os.ReadFile(cod.SourceName)
 	if err != nil {
 		return err
 	}

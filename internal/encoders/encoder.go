@@ -9,7 +9,7 @@ import (
 	"io"
 )
 
-// Encrypto encode file with password.
+// Encrypto encode file with password. Returns array bytes and error.
 func Encrypto(plaintext, keystring []byte) ([]byte, error) {
 
 	// Key
